@@ -1,0 +1,41 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  client_rb:
+    environment: _default
+  attributes:
+    rackspace:
+      cloud_credentials:
+        api_key: fakekey
+        username: fakeusername
+    testkitchen: true
+    openssh:
+      server:
+        password_authentication: 'yes'
+        permit_root_login: 'yes'
+    cloud:
+      public_ipv4: '127.0.0.1'
+    authorization:
+      sudo:
+        users: ['vagrant']
+        passwordless: true
+    platformstack:
+      cloud_backup:
+        enabled: false
+      omnibus_updater:
+        enabled: false
+      iptables:
+        allow_ssh_from_world: true
+
+platforms:
+  - name: centos-6.5
+    run_list:
+    - recipe[yum]
+suites:
+  - name: python-api
+    run_list:
+    - recipe[python-api::default]
+    - recipe[python-api::python_app]
